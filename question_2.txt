@@ -23,7 +23,7 @@
         return $publishData;
     }
 
-    // 屬共用 function
+    // common function
     public function modifyData()
     {
         return [
@@ -32,7 +32,7 @@
         ];
     }
 
-    // 屬共用 function
+    // common function
     public function originData()
     {
         return collect([
