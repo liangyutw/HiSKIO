@@ -1,0 +1,47 @@
+    public function test($product)
+    {
+        $modifyData = $this->modifyData();
+        $originData = $this->originData();
+
+        // 驗證
+        $originItem = $originData->intersect($product);
+        $removeItem = $originData->diff($originItem);
+        $addItem = $product->diff($originItem);
+
+        foreach ($modifyData as $key => $row) {
+            
+            if ($key === 'remove') {
+                $diffItem = array_diff($row, $removeItem->all());
+                if (count($diffItem) <= 0) {
+                    $valid[$key]['pass'] = $removeItem->all();
+                } else {
+                    $valid[$key]['error'] = $diffItem;
+                }
+            } else {
+                $valid[$key]['pass'] =$addItem->all();
+            }
+        }
+
+        return $valid;
+    }
+
+    // 屬共用 function
+    public function modifyData()
+    {
+        return [
+            'remove' => ['yahoo'],
+            'add' => ['shopee']
+        ];
+    }
+    // 屬共用 function
+    public function originData()
+    {
+        return collect([
+            'pchome',
+            'yahoo',
+            'ruten',
+        ]);
+    }
+
+//需承接 question_2 的 $product 變數
+$valid = $this->test($product);

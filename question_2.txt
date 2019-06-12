@@ -1,0 +1,45 @@
+    public function process()
+    {
+        $modifyData = $this->modifyData();
+        $originData = $this->originData();
+
+        foreach ($modifyData as $key => $row) {
+            if ($key === 'remove') {
+                $publishData = $originData->filter(function($item) use ($row) {
+                    if (!in_array($item, $row)) {
+                        return $item;
+                    }
+                });
+            } else  {
+                foreach($row as $val) {
+                    $searchResult = $publishData->search($val);
+                    if (!$searchResult) {
+                        $publishData->push($val);
+                    }
+                }
+            }
+        }
+
+        return $publishData;
+    }
+
+    // 屬共用 function
+    public function modifyData()
+    {
+        return [
+            'remove' => ['yahoo'],
+            'add' => ['shopee']
+        ];
+    }
+
+    // 屬共用 function
+    public function originData()
+    {
+        return collect([
+            'pchome',
+            'yahoo',
+            'ruten',
+        ]);
+    }
+
+$product = $this->process();
